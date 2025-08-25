@@ -107,7 +107,37 @@ const handleLogout = async () => {
 </style>
 ```
 
-## Apple Login with Redirect Mode
+## Popup Mode Login (Default)
+
+```vue
+<template>
+  <div>
+    <button @click="handlePopupLogin" :disabled="!isReady || isLoading">
+      Sign in with Apple (Popup)
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { useApple } from '~/composables/useApple'
+
+const { login, isReady, isLoading } = useApple()
+
+const handlePopupLogin = async () => {
+  try {
+    const result = await login({ popup: true })
+    
+    if (result.success) {
+      console.log('Popup login successful:', result.user)
+    }
+  } catch (err) {
+    console.error('Apple popup login failed:', err)
+  }
+}
+</script>
+```
+
+## Redirect Mode Login
 
 ```vue
 <template>

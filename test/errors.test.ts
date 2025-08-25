@@ -19,6 +19,7 @@ import {
   clearErrorStatistics
 } from '../composables/utils/errors'
 import type { SocialPlatform, SocialError } from '../composables/types'
+import { setupTestEnvironment, cleanupTestEnvironment } from './utils/testHelpers'
 
 // Mock console methods
 const mockConsole = {
@@ -62,6 +63,14 @@ Object.defineProperty(global, 'sessionStorage', {
 })
 
 describe('SocialLoginError', () => {
+  beforeEach(() => {
+    setupTestEnvironment()
+  })
+
+  afterEach(() => {
+    cleanupTestEnvironment()
+  })
+
   it('should create error with correct properties', () => {
     const error = new SocialLoginError(
       SocialErrorCodes.USER_CANCELLED,
@@ -75,6 +84,7 @@ describe('SocialLoginError', () => {
     expect(error.message).toBe('User cancelled login')
     expect(error.details).toEqual({ extra: 'data' })
     expect(error.name).toBe('SocialLoginError')
+    expect(error instanceof Error).toBe(true)
   })
 
   it('should convert to SocialError interface', () => {
@@ -91,6 +101,28 @@ describe('SocialLoginError', () => {
       message: 'Network failed',
       details: undefined
     })
+  })
+
+  it('should create error without details', () => {
+    const error = new SocialLoginError(
+      SocialErrorCodes.API_ERROR,
+      'line',
+      'API failed'
+    )
+
+    expect(error.details).toBeUndefined()
+    expect(error.toSocialError().details).toBeUndefined()
+  })
+
+  it('should preserve stack trace', () => {
+    const error = new SocialLoginError(
+      SocialErrorCodes.UNKNOWN_ERROR,
+      'telegram',
+      'Unknown error'
+    )
+
+    expect(error.stack).toBeDefined()
+    expect(error.stack).toContain('SocialLoginError')
   })
 })
 

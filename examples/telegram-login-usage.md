@@ -106,6 +106,62 @@ const handleLogout = async () => {
 </style>
 ```
 
+## Widget Mode Login (Default for Telegram)
+
+```vue
+<template>
+  <div>
+    <button @click="handleWidgetLogin" :disabled="isLoading">
+      Login with Telegram (Widget)
+    </button>
+  </div>
+</template>
+
+<script setup>
+const { login, isLoading } = useTelegram()
+
+const handleWidgetLogin = async () => {
+  try {
+    // Telegram uses widget mode by default (no true popup support)
+    const result = await login()
+    
+    if (result.success) {
+      console.log('Widget login successful:', result.user)
+    }
+  } catch (error) {
+    console.error('Widget login failed:', error)
+  }
+}
+</script>
+```
+
+## Redirect Mode Login
+
+```vue
+<template>
+  <div>
+    <button @click="handleRedirectLogin" :disabled="isLoading">
+      Login with Telegram (Redirect)
+    </button>
+  </div>
+</template>
+
+<script setup>
+const { login, isLoading } = useTelegram()
+
+const handleRedirectLogin = async () => {
+  try {
+    const result = await login({ 
+      popup: false,
+      redirectUrl: 'http://localhost:3000/auth/callback'
+    })
+  } catch (error) {
+    console.error('Redirect login failed:', error)
+  }
+}
+</script>
+```
+
 ## Advanced Usage
 
 ### Telegram Login with Custom Options

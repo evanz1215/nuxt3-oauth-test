@@ -2,6 +2,15 @@
 
 This document demonstrates how to use the `useGoogle` composable for Google OAuth authentication.
 
+## Basic Setup
+
+First, ensure you have configured your Google Client ID in your environment variables:
+
+```bash
+# .env
+GOOGLE_CLIENT_ID=your_google_client_id
+```
+
 ## Basic Usage
 
 ### Simple Login Component
@@ -23,6 +32,7 @@ This document demonstrates how to use the `useGoogle` composable for Google OAut
       <h3>Welcome, {{ user.name }}!</h3>
       <p>Email: {{ user.email }}</p>
       <img :src="user.avatar" :alt="user.name" />
+      <p>Google ID: {{ user.googleId }}</p>
       <button @click="handleLogout">Logout</button>
     </div>
     
@@ -98,6 +108,65 @@ const handleLogout = async () => {
 </style>
 ```
 
+## Popup Mode Login (Default)
+
+```vue
+<template>
+  <div>
+    <button @click="handlePopupLogin" :disabled="isLoading">
+      Login with Google (Popup)
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { login, isLoading } = useGoogle()
+
+const handlePopupLogin = async () => {
+  try {
+    const result = await login({ 
+      popup: true,
+      scopes: ['profile', 'email']
+    })
+    
+    if (result.success) {
+      console.log('Popup login successful:', result.user)
+    }
+  } catch (error) {
+    console.error('Popup login failed:', error)
+  }
+}
+</script>
+```
+
+## Redirect Mode Login
+
+```vue
+<template>
+  <div>
+    <button @click="handleRedirectLogin" :disabled="isLoading">
+      Login with Google (Redirect)
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { login, isLoading } = useGoogle()
+
+const handleRedirectLogin = async () => {
+  try {
+    // This will redirect the user to Google's OAuth page
+    const result = await login({ 
+      popup: false,
+      redirectUrl: 'http://localhost:3000/auth/callback'
+    })
+  } catch (error) {
+    console.error('Redirect login failed:', error)
+  }
+}
+</script>
+```
+
 ## Advanced Usage
 
 ### Login with Custom Scopes
@@ -116,6 +185,7 @@ const loginWithCustomScopes = async () => {
     if (result.success) {
       console.log('Login with calendar access:', result.user)
       // Now you can access Google Calendar API with the access token
+      console.log('Access token:', result.user.accessToken)
     }
   } catch (error) {
     console.error('Login failed:', error)

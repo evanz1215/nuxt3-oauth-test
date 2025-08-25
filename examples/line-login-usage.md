@@ -99,6 +99,62 @@ const handleLogout = async () => {
 </style>
 ```
 
+## Popup Mode Login (Default)
+
+```vue
+<template>
+  <div>
+    <button @click="handlePopupLogin" :disabled="isLoading">
+      Login with Line (Popup)
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { login, isLoading } = useLine()
+
+const handlePopupLogin = async () => {
+  try {
+    const result = await login({ popup: true })
+    
+    if (result.success) {
+      console.log('Popup login successful:', result.user)
+    }
+  } catch (error) {
+    console.error('Popup login failed:', error)
+  }
+}
+</script>
+```
+
+## Redirect Mode Login
+
+```vue
+<template>
+  <div>
+    <button @click="handleRedirectLogin" :disabled="isLoading">
+      Login with Line (Redirect)
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { login, isLoading } = useLine()
+
+const handleRedirectLogin = async () => {
+  try {
+    // This will redirect the user to Line's OAuth page
+    const result = await login({ 
+      popup: false,
+      redirectUrl: 'http://localhost:3000/auth/callback'
+    })
+  } catch (error) {
+    console.error('Redirect login failed:', error)
+  }
+}
+</script>
+```
+
 ## Advanced Usage
 
 ### Login with Bot Prompt Options
