@@ -3,7 +3,6 @@ import type {
   LineUser,
   SocialLoginResult,
   SocialPlatform,
-  SocialError,
 } from "./types";
 import { SDK_URLS, TIMEOUTS, DEFAULT_SCOPES } from "./constants";
 import { useSocialConfig } from "./useSocialConfig";
@@ -50,13 +49,11 @@ interface LiffProfile {
   statusMessage?: string;
 }
 
-interface LineOAuthConfig {
-  client_id: string;
-  redirect_uri: string;
-  state: string;
-  scope: string;
-  response_type: 'code';
-  bot_prompt?: 'normal' | 'aggressive';
+interface LineConfig {
+  clientId: string;
+  clientSecret?: string;
+  redirectUri?: string;
+  liffId?: string;
 }
 
 interface LineTokenResponse {
@@ -139,7 +136,7 @@ export const useLine = () => {
     try {
       // Validate configuration first
       validateConfig(platform);
-      const config = getPlatformConfig(platform);
+      const config = getPlatformConfig(platform) as LineConfig;
 
       // Load SDK if not already loaded
       await loadSDK();
@@ -153,7 +150,7 @@ export const useLine = () => {
       // Initialize LIFF (Line Front-end Framework)
       // Note: In a real application, you would need a LIFF ID from Line Developers Console
       // For now, we'll prepare for both LIFF and web-based OAuth flows
-      const liffId = (config as any).liffId;
+      const liffId = config?.liffId;
       
       if (liffId) {
         // Initialize LIFF if LIFF ID is provided
@@ -317,11 +314,11 @@ export const useLine = () => {
 
     return new Promise((resolve, reject) => {
       try {
-        const config = getPlatformConfig(platform);
-        const clientId = (config as any).clientId;
+        const config = getPlatformConfig(platform) as LineConfig;
+        const clientId = config.clientId;
         const redirectUri = 
           options.redirectUrl || 
-          (config as any).redirectUri || 
+          config.redirectUri || 
           `${window.location.origin}/auth/callback`;
 
         // Generate state parameter for CSRF protection
@@ -435,11 +432,11 @@ export const useLine = () => {
     options: LineLoginOptions = {}
   ): Promise<SocialLoginResult> => {
     try {
-      const config = getPlatformConfig(platform);
-      const clientId = (config as any).clientId;
+      const config = getPlatformConfig(platform) as LineConfig;
+      const clientId = config.clientId;
       const redirectUri =
         options.redirectUrl ||
-        (config as any).redirectUri ||
+        config.redirectUri ||
         `${window.location.origin}/auth/callback`;
 
       // Generate state parameter for CSRF protection
@@ -495,14 +492,14 @@ export const useLine = () => {
    */
   const exchangeCodeForToken = async (
     code: string,
-    state: string
+    _state: string
   ): Promise<LineTokenResponse> => {
     try {
-      const config = getPlatformConfig(platform);
-      const clientId = (config as any).clientId;
-      const clientSecret = (config as any).clientSecret;
+      const config = getPlatformConfig(platform) as LineConfig;
+      const clientId = config.clientId;
+      const clientSecret = config.clientSecret;
       const redirectUri = 
-        (config as any).redirectUri || 
+        config.redirectUri || 
         `${window.location.origin}/auth/callback`;
 
       // Note: In a real application, this should be done on the server side
@@ -517,7 +514,7 @@ export const useLine = () => {
           code,
           redirect_uri: redirectUri,
           client_id: clientId,
-          client_secret: clientSecret,
+          client_secret: clientSecret || "",
         }),
       });
 
@@ -529,7 +526,7 @@ export const useLine = () => {
 
       return await response.json();
     } catch (error) {
-      throw new Error(`Failed to exchange code for token: ${error}`);
+      throw new Error(`Failed to exchange code for token: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
@@ -552,7 +549,7 @@ export const useLine = () => {
 
       return await response.json();
     } catch (error) {
-      throw new Error(`Failed to fetch user profile from Line: ${error}`);
+      throw new Error(`Failed to fetch user profile from Line: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
@@ -803,7 +800,7 @@ export const useLine = () => {
 
   // Initialize SDK when composable is used
   onMounted(() => {
-    if (import.meta.client) {
+    if (import.meta.client && !import.meta.vitest) {
       // Check if we're handling a redirect callback
       if (isRedirectCallback()) {
         setLoginState({ isLoading: true, platform });

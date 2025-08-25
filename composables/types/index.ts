@@ -2,9 +2,18 @@
 
 export type SocialPlatform = 'google' | 'apple' | 'line' | 'telegram'
 
+export interface RetryConfig {
+  maxRetries: number
+  baseDelay: number
+  maxDelay: number
+  backoffMultiplier: number
+  retryableErrors: string[]
+}
+
 export interface SocialLoginOptions {
   popup?: boolean
   redirectUrl?: string
+  retryConfig?: RetryConfig
 }
 
 export interface SocialUser {
@@ -40,6 +49,7 @@ export interface LoginState {
 // Google specific types
 export interface GoogleLoginOptions extends SocialLoginOptions {
   scopes?: string[]
+  retryConfig?: RetryConfig
 }
 
 export interface GoogleUser extends SocialUser {
@@ -51,6 +61,7 @@ export interface GoogleUser extends SocialUser {
 // Apple specific types
 export interface AppleLoginOptions extends SocialLoginOptions {
   usePopup?: boolean
+  retryConfig?: RetryConfig
 }
 
 export interface AppleUser extends SocialUser {
@@ -62,6 +73,7 @@ export interface AppleUser extends SocialUser {
 // Line specific types
 export interface LineLoginOptions extends SocialLoginOptions {
   botPrompt?: 'normal' | 'aggressive'
+  retryConfig?: RetryConfig
 }
 
 export interface LineUser extends SocialUser {
@@ -75,6 +87,7 @@ export interface LineUser extends SocialUser {
 export interface TelegramLoginOptions extends SocialLoginOptions {
   size?: 'large' | 'medium' | 'small'
   cornerRadius?: number
+  retryConfig?: RetryConfig
 }
 
 export interface TelegramUser extends SocialUser {

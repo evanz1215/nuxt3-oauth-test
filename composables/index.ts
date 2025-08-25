@@ -12,6 +12,8 @@ export { useSocialState } from './useSocialState'
 // Individual platform composables
 export { useGoogle } from './useGoogle'
 export { useApple } from './useApple'
-// export { useLine } from './useLine'
-// export { useTelegram } from './useTelegram'
-// export { useSocial } from './useSocial'
+export { useLine } from './useLine'
+export { useTelegram } from './useTelegram'
+
+// Unified social login composable
+export { useSocial } from './useSocial'

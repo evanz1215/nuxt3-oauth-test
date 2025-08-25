@@ -27,6 +27,11 @@ global.ref = vi.fn((value: any) => ({
 
 global.readonly = vi.fn((value: any) => value)
 
+global.computed = vi.fn((getter: () => any) => ({
+  value: getter(),
+  __v_isRef: true
+}))
+
 global.onMounted = vi.fn((callback: () => void) => {
   // In test environment, immediately call the callback
   if (process.client !== false) {

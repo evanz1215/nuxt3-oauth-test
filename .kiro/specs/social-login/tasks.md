@@ -31,18 +31,12 @@
 
 - [x] 4.2 實作 Google 彈窗登入模式
 
-
   - 整合 Google Sign-In JavaScript SDK
   - 實作彈窗模式登入流程
   - 處理彈窗關閉和錯誤情況
   - _Requirements: 4.1, 4.3, 4.5_
 
 - [x] 4.3 實作 Google 重導向登入模式
-
-
-
-
-
 
   - 實作重導向模式登入流程
   - 處理登入回調和狀態管理
@@ -51,10 +45,7 @@
 
 - [-] 5. 實作 Apple 登入功能
 
-
 - [x] 5.1 建立 useApple composable 基礎結構
-
-
 
   - 實作 Apple Sign-In SDK 動態載入
   - 建立 Apple 特定的類型定義
@@ -63,13 +54,6 @@
 
 - [x] 5.2 實作 Apple 彈窗和重導向登入
 
-
-
-
-
-
-
-
   - 整合 Apple Sign-In JavaScript SDK
   - 實作彈窗和重導向模式
   - 處理 Apple 特有的 identity token
@@ -77,28 +61,14 @@
   - _Requirements: 4.1, 4.3, 4.4, 4.5_
 
 - [ ] 6. 實作 Line 登入功能
-- [-] 6.1 建立 useLine composable 基礎結構
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- [x] 6.1 建立 useLine composable 基礎結構
 
   - 實作 Line Login SDK 動態載入
   - 建立 Line 特定的類型定義
   - 實作基礎的登入/登出方法
   - _Requirements: 1.3, 1.5_
 
-- [ ] 6.2 實作 Line 彈窗和重導向登入
+- [x] 6.2 實作 Line 彈窗和重導向登入
 
   - 整合 Line Login SDK
   - 實作彈窗和重導向模式
@@ -106,15 +76,16 @@
   - 建立 Line 登入的單元測試
   - _Requirements: 4.1, 4.3, 4.4, 4.5_
 
-- [ ] 7. 實作 Telegram 登入功能
-- [ ] 7.1 建立 useTelegram composable 基礎結構
+- [x] 7. 實作 Telegram 登入功能
+
+- [x] 7.1 建立 useTelegram composable 基礎結構
 
   - 實作 Telegram Login Widget 動態載入
   - 建立 Telegram 特定的類型定義
   - 實作基礎的登入/登出方法
   - _Requirements: 1.4, 1.5_
 
-- [ ] 7.2 實作 Telegram Widget 登入
+- [x] 7.2 實作 Telegram Widget 登入
 
   - 整合 Telegram Login Widget
   - 實作 Widget 模式登入（Telegram 不支援彈窗）
@@ -123,14 +94,14 @@
   - _Requirements: 4.4_
 
 - [ ] 8. 實作統一的 useSocial composable
-- [ ] 8.1 建立 useSocial 核心架構
+- [x] 8.1 建立 useSocial 核心架構
 
   - 整合所有個別平台 composables
   - 實作統一的登入介面方法
   - 建立平台選擇和委派邏輯
   - _Requirements: 2.1, 2.2, 2.4_
 
-- [ ] 8.2 實作統一的狀態管理和錯誤處理
+- [x] 8.2 實作統一的狀態管理和錯誤處理
 
   - 整合全域狀態管理
   - 實作統一的錯誤處理機制
@@ -138,7 +109,8 @@
   - 實作統一的登出功能
   - _Requirements: 2.3, 5.4, 5.5_
 
-- [ ] 9. 實作錯誤處理和重試機制
+- [x] 9. 實作錯誤處理和重試機制
+
 
   - 建立統一的錯誤處理類別
   - 實作各平台特定的錯誤映射
